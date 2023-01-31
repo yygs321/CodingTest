@@ -1,0 +1,5 @@
+A,B,C = map(int, input().split())
+lt1 = list()
+lt1.extend([A,B,C])
+lt1.sort()
+print(lt1[1])
