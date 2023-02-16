@@ -1,5 +1,4 @@
-a,b=map(int,input().split())
-if int("".join(reversed(str(a))))> int("".join(reversed(str(b)))): 
-  print("".join(reversed(str(a))))
-else: 
-  print("".join(reversed(str(b))))
+a,b=input().split()
+a=int(a[::-1])
+b=int(b[::-1])
+print(a) if a>b else print(b)
