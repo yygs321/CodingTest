@@ -2,14 +2,11 @@ from collections import deque
 from collections import defaultdict
 
 N=int(input())
-start=1
+parent=1
 
+stack=deque()
 lst=defaultdict(list)
 result=defaultdict(list)
-stack=deque()
-visited=[]
-result=defaultdict(list)
-parent=1
 
 for _ in range(N-1):
     x,y=map(int,input().split())  
