@@ -78,7 +78,7 @@
 |20444. 색종이와 가위|[링크](./%EB%B0%B1%EC%A4%80/Gold/20444.%E2%80%85%EC%83%89%EC%A2%85%EC%9D%B4%EC%99%80%E2%80%85%EA%B0%80%EC%9C%84/README.md)|
 |6987. 월드컵|[링크](./%EB%B0%B1%EC%A4%80/Gold/6987.%E2%80%85%EC%9B%94%EB%93%9C%EC%BB%B5/README.md)|
 |7576. 토마토|[링크](./%EB%B0%B1%EC%A4%80/Gold/7576.%E2%80%85%ED%86%A0%EB%A7%88%ED%86%A0/README.md)|
-|Silver|[링크](./%EB%B0%B1%EC%A4%80/Silver/2178.%EB%AF%B8%EB%A1%9C%ED%83%90%EC%83%89.py)|
+|Silver|[링크](./%EB%B0%B1%EC%A4%80/Silver/2667.%EB%8B%A8%EC%A7%80%EB%B2%88%ED%98%B8%EB%B6%99%EC%9D%B4%EA%B8%B0.py)|
 ### 🚀 Silver
 | 문제번호 | 링크 |
 | ----- | ----- |
