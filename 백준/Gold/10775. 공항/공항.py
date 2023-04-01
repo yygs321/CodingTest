@@ -1,32 +1,34 @@
-def find_parent(x):
-    if x != parent[x]:
-        parent[x] = find_parent(parent[x])
-    return parent[x]
-
-
-def union_parent(x, y):
-    x = find_parent(x)
-    y = find_parent(y)
-    if x < y:
-        parent[y] = x
+#1,g까지 게이트
+#1, i번째게이트 중 하나에 도킹
+#앞 비행기 도킹 불가 -> break
+#최대 도킹 수
+def union(x,y):
+    xroot=find(x)
+    yroot=find(y)
+    if xroot<=yroot:
+        root[yroot]=xroot
     else:
-        parent[x] = y
+        root[xroot]=yroot
 
+def find(x):
+    if x!=root[x]:
+        root[x]=find(root[x])
+    return root[x]
 
-G = int(input())
-P = int(input())
-
-parent = [i for i in range(G+1)]
-plane = []
-for _ in range(P):
+g=int(input())
+p=int(input())
+plane=[]
+for _ in range(p):
     plane.append(int(input()))
 
-count = 0
-for p in plane:
-    x = find_parent(p)
-    if x == 0:
-        break
-    union_parent(x, x-1)
-    count += 1
+root=[i for i in range(g+1)]
+cnt=0
 
-print(count)
+for pp in plane:
+    px=find(pp) 
+    if px==0: # 가능한 게이트가 0이면 이후 전부 도킹 불가
+        break
+    union(px,px-1) # 다음 비행기가 사용할 수 있는 가장 큰 게이트 번호로 바꾼다
+    cnt+=1
+
+print(cnt)
