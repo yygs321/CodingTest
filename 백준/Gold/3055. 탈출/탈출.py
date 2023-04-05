@@ -32,8 +32,9 @@ def bfs2(x,y):
                 if graph[nx][ny] == "X": continue
                 elif graph[nx][ny]=="D": #비버 굴 도착
                     result=visited[x][y]+1
-                    return
+                    return #리턴 해주기
                 else:
+                    # "." , "*" 일때
                     if visited[nx][ny] != -1 and visited[nx][ny] <= visited[x][y] + 1:
                         continue
                     visited[nx][ny]=visited[x][y]+1
@@ -61,8 +62,7 @@ if __name__ == '__main__':
                 q1.append((i,j,cnt))
             elif graph[i][j]=="S":
                 cnt2=0
-                p=i
-                q=j
+                p,q=i,j
                 q2.append((i,j))
 
 
