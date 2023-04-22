@@ -47,7 +47,7 @@ for row in range(N):
 
         num += 1
 
-answer = [[1 for i in range(M)] for j in range(N)]
+answer = [[0 for i in range(M)] for j in range(N)]
 # print(empty_graph)
 for row in range(N):
     for col in range(M):
@@ -66,7 +66,9 @@ for row in range(N):
                 #print("row,col", n_row, n_col)
                 s.add(empty_graph[n_row][n_col])
             for i in s:
-                answer[row][col] += dic[i]
+                answer[row][col] += dic[i] % 10
+            # print(s)
+            answer[row][col] += 1
             answer[row][col] = answer[row][col] % 10
 
 for i in range(N):
