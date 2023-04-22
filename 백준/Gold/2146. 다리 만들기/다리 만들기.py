@@ -65,8 +65,8 @@ for i in range(n):
 check = [[int(1e9) for _ in range(cnt+1)] for _ in range(cnt+1)]
 for i in range(n):
     for j in range(n):
-        visited = [[int(1e9) for _ in range(n)] for _ in range(n)]
         if graph[i][j] == 1:
+            visited = [[int(1e9) for _ in range(n)] for _ in range(n)]
             num = lst[i][j]
             bfs(i, j, num)
 
@@ -75,18 +75,3 @@ for i in range(cnt+1):
     result=min(result, min(check[i]))
 
 print(result)
-'''
-10
-1 1 1 0 0 0 0 1 1 1
-1 1 1 1 0 0 0 0 1 1
-1 0 1 1 0 0 0 0 1 1
-0 0 1 1 1 0 0 0 0 1
-0 0 0 1 0 0 0 0 0 1
-0 0 0 0 0 0 0 0 0 1
-0 0 0 0 0 0 0 0 0 0
-0 0 0 0 1 1 0 0 0 0
-0 0 0 0 1 1 1 0 0 0
-0 0 0 0 0 0 0 0 0 0
-
-3
-'''
