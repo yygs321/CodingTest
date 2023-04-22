@@ -1,64 +1,73 @@
-from collections import deque
+from collections import defaultdict, deque
 
-def bfs(i,j):
-    global flag
-    global cnt
-    
-    queue.append((i,j))
-    visited[i][j]=flag
-    
-    while queue:
-        x,y=queue.popleft()
-    
-        for i in range(4):
-            nx=x+dx[i]
-            ny=y+dy[i]
-      
-            if nx<0 or nx>=r or ny<0 or ny>=c: continue
-            if graph[nx][ny]==0 and visited[nx][ny]==0:
-                visited[nx][ny]=flag
-                cnt+=1
-                queue.append((nx,ny))
-    return
+dr = [0, 1, 0, -1]
+dc = [1, 0, -1, 0]
 
-def solve(x,y):
-    check=set()
-    answer[x][y]+=1
-    for i in range(4):
-        nx=x+dx[i]
-        ny=y+dy[i]
-    
-        if nx<0 or nx>=r or ny<0 or ny>=c: continue
-        if visited[nx][ny] not in check and graph[nx][ny]==0:
-            k=visited[nx][ny]
-            check.add(k)
-            answer[x][y]+=lst[k]
+N, M = map(int, input().split())
 
-r,c=map(int,input().split())
-graph=[list(map(int,input().rstrip())) for _ in range(r)]
-queue=deque()
-dx=[-1,1,0,0]
-dy=[0,0,-1,1]
+graph = []
 
-flag=0
-visited=[[0 for _ in range(c)] for _ in range(r)]
-answer=[[0 for _ in range(c)] for _ in range(r)]
-lst={} #그룹별 0 개수
+dic = defaultdict(int)
 
-for i in range(r):
-    for j in range(c):
-        if graph[i][j]==0 and visited[i][j]==0:
-            cnt=1
-            flag+=1
-            bfs(i,j)
-            lst[flag]= cnt
+empty_graph = [[0 for i in range(M)] for j in range(N)]
 
-for i in range(r):
-    for j in range(c):
-        if graph[i][j]==1:
-            solve(i,j)
+for _ in range(N):
+    graph.append(input())
 
-for i in range(r):
-    for j in range(c):
-        print(answer[i][j]%10, end="")
-    print()
+q = deque()
+num = 1
+
+for row in range(N):
+    for col in range(M):
+        if graph[row][col] == '1':  # 벽이면 통과
+            continue
+        if empty_graph[row][col] != 0:  # 이미 방문했으면 통과
+            continue
+
+        max_value = 0
+        q.append((row, col))
+        empty_graph[row][col] = num
+
+        while q:
+            c_row, c_col = q.popleft()
+            max_value += 1
+            for i in range(4):
+                n_row = c_row + dr[i]
+                n_col = c_col + dc[i]
+                if n_row < 0 or n_col < 0 or n_row >= N or n_col >= M:
+                    continue
+                if graph[n_row][n_col] == '1':  # 벽이면 통과
+                    continue
+                if empty_graph[n_row][n_col] != 0:  # 이미 방문했으면 통과
+                    continue
+                empty_graph[n_row][n_col] = num
+                q.append((n_row, n_col))
+
+        dic[num] = max_value
+
+        num += 1
+
+answer = [[1 for i in range(M)] for j in range(N)]
+# print(empty_graph)
+for row in range(N):
+    for col in range(M):
+        #print(row, col)
+        # print(graph[row][col])
+        if graph[row][col] == '0':
+            answer[row][col] = 0
+        else:
+            # print("wall")
+            s = set()
+            for i in range(4):
+                n_row = row + dr[i]
+                n_col = col + dc[i]
+                if n_row < 0 or n_col < 0 or n_row >= N or n_col >= M:
+                    continue
+                #print("row,col", n_row, n_col)
+                s.add(empty_graph[n_row][n_col])
+            for i in s:
+                answer[row][col] += dic[i]
+            answer[row][col] = answer[row][col] % 10
+
+for i in range(N):
+    print(''.join(str(s) for s in answer[i]))
