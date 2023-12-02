@@ -1,27 +1,19 @@
-import copy
-
+INF= float('inf')
 n = int(input())
-rgb = [list(map(int, input().split())) for _ in range(n)]
-answer = float('inf')
-for k in range(3):
-    tmp = copy.deepcopy(rgb)
-    if k == 0:
-        tmp[1][0] = min(tmp[0][1], tmp[0][2]) + tmp[1][0]
-        tmp[1][1] = tmp[0][2] + tmp[1][1]
-        tmp[1][2] = tmp[0][1] + tmp[1][2]
-    elif k == 1:
-        tmp[1][0] = tmp[0][2] + tmp[1][0]
-        tmp[1][1] = min(tmp[0][0], tmp[0][2]) + tmp[1][1]
-        tmp[1][2] = tmp[0][0] + tmp[1][2]
-    elif k == 2:
-        tmp[1][0] = tmp[0][1] + tmp[1][0]
-        tmp[1][1] = tmp[0][0] + tmp[1][1]
-        tmp[1][2] = min(tmp[0][0], tmp[0][1]) + tmp[1][2]
-    for i in range(2, n):
-        tmp[i][0] = min(tmp[i-1][1], tmp[i-1][2])+tmp[i][0]
-        tmp[i][1] = min(tmp[i-1][0], tmp[i-1][2])+tmp[i][1]
-        tmp[i][2] = min(tmp[i-1][0], tmp[i-1][1])+tmp[i][2]
+rgb = []
+ans = INF
+for _ in range(n):
+    rgb.append(list(map(int, input().split())))
 
-    answer = min(answer, tmp[n-1][k])
+for i in range(3):
+    dp = [[INF, INF, INF] for _ in range(n)]
+    dp[0][i] = rgb[0][i] #처음 색깔로 정한 것만 값을 넣어주기, 나머지는 INF
+    for j in range(1, n):
+        dp[j][0] = rgb[j][0] + min(dp[j-1][1], dp[j-1][2])
+        dp[j][1] = rgb[j][1] + min(dp[j-1][0], dp[j-1][2])
+        dp[j][2] = rgb[j][2] + min(dp[j-1][0], dp[j-1][1])
 
-print(answer)
+    for j in range(3):
+        if i != j:
+            ans = min(ans, dp[-1][j])
+print(ans)
