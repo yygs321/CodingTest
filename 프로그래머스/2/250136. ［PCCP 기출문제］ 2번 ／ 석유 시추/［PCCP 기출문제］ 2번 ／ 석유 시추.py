@@ -9,21 +9,24 @@ def solution(land):
 
     def bfs(i,j,num):
         queue=deque()
+        visited=[[False for _ in range(m)] for _ in range(n)]
         queue.append((i,j))
-        land[i][j]=num
+        visited[i][j]=True
         cnt=1
         
         while queue:
             x,y=queue.popleft()
+            land[x][y]=num
             
             for k in range(4):
                 nx=x+dx[k]
                 ny=y+dy[k]
                 if nx<0 or ny<0 or nx>=n or ny>=m: continue
-                if land[nx][ny]==1: 
-                    land[nx][ny]=num
-                    queue.append((nx,ny))
-                    cnt+=1
+                if visited[nx][ny]==True: continue
+                if land[nx][ny]==0: continue
+                visited[nx][ny]=True
+                queue.append((nx,ny))
+                cnt+=1
         result[num]=cnt
                 
     num=1
@@ -42,7 +45,7 @@ def solution(land):
                 continue
             answer_set.add(land[j][i])
     
-        for a in list(answer_set):
+        for a in answer_set:
             tmp+=result[a]
         answer=max(answer, tmp)
         
