@@ -164,6 +164,7 @@
 |6987. 월드컵|[링크](./%EB%B0%B1%EC%A4%80/Gold/6987.%E2%80%85%EC%9B%94%EB%93%9C%EC%BB%B5/README.md)|
 |7576. 토마토|[링크](./%EB%B0%B1%EC%A4%80/Gold/7576.%E2%80%85%ED%86%A0%EB%A7%88%ED%86%A0/README.md)|
 |9019. DSLR|[링크](./%EB%B0%B1%EC%A4%80/Gold/9019.%E2%80%85DSLR/README.md)|
+|9251. LCS|[링크](./%EB%B0%B1%EC%A4%80/Gold/9251.%E2%80%85LCS/README.md)|
 ### 🚀 Gold II
 | 문제번호 | 링크 |
 | ----- | ----- |
