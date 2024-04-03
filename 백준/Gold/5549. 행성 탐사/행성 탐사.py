@@ -8,15 +8,15 @@ result = [[] for _ in range(n)]
 result = [[[0, 0, 0] for _ in range(m+1)] for _ in range(n+1)]
 for i in range(1, n+1):
     for j in range(1, m+1):
+        result[i][j][0] = result[i][j-1][0] + result[i-1][j][0] - result[i-1][j-1][0]
+        result[i][j][1] = result[i][j-1][1] + result[i-1][j][1] - result[i-1][j-1][1]
+        result[i][j][2] = result[i][j-1][2] + result[i-1][j][2] - result[i-1][j-1][2]
         if graph[i][j] == 'J':
             result[i][j][0] += 1
         elif graph[i][j] == 'O':
             result[i][j][1] += 1
         elif graph[i][j] == 'I':
-            result[i][j][2] += 1
-        result[i][j][0] = result[i][j-1][0] + result[i-1][j][0] - result[i-1][j-1][0] +result[i][j][0]
-        result[i][j][1] = result[i][j-1][1] + result[i-1][j][1] - result[i-1][j-1][1] +result[i][j][1]
-        result[i][j][2] = result[i][j-1][2] + result[i-1][j][2] - result[i-1][j-1][2] +result[i][j][2]
+            result[i][j][2] += + 1
 
 
 answer = []
