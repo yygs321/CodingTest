@@ -1,12 +1,11 @@
-from collections import deque
 def solution(elements):
-    
-    result=set(elements)
-    
-    for i in range(1,len(elements)):
-        queue=deque([], i+1)
-        for j in range(-i,i+1):
-            queue.append(elements[j])
-            result.add(sum(queue))
-    
-    return len(list(result))
+    n = len(elements)
+    result = set()
+
+    for i in range(n):
+        tmp = elements[i]
+        result.add(tmp)
+        for j in range(i+1, i+n):
+            tmp += elements[j%n]
+            result.add(tmp)
+    return len(result)
