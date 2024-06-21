@@ -14,7 +14,9 @@ def solution(n, t, m, timetable):
     while n>0:
         n-=1
         idx=bisect_left(new_timetable, current_time)
-        if n==0:
+        
+        #마지막 운행일때
+        if n==0: 
             #맨 마지막 사람보다 버스 시간이 뒤일 경우
             if idx>=len(new_timetable): 
                 #사람이 남아있으면
@@ -30,31 +32,30 @@ def solution(n, t, m, timetable):
             else:
                 #현재 타고 있는 사람 수가 현재 시간에 탈 수 있는 사람 수보다 많을 때
                 if idx>arrived+m:
-                    #타고 있는 맨 마지막 사람보다 1분빨리
+                    #탈 수 있는 맨 마지막 사람보다 1분빨리
                     con_time=new_timetable[arrived+m-1]-1
 
                 #현재 타고 있는 사람 수가 탈 수 있는 사람수와 같을 때
                 elif idx==arrived+m:
-                    #맨 마지막 사람보다 빨리
+                    #(타고 있고=탈 수 있는) 맨 마지막 사람보다 빨리
                     con_time=new_timetable[arrived+m-1]-1
 
                 #현재 타고 있는 사람 수가 탈 수 있는 사람 수보다 적을 때
-                elif idx<arrived+m:
+                else: # idx < arrived+m
                     if new_timetable[idx]==current_time: #딱 출발 시간이면 그보다 빨리
                         con_time= new_timetable[idx]-1
-                    else: #idx 위치값이 출발시간 보다 뒷타임 사람 = 자리 비어있음
+                    else: #idx 위치값이 출발시간 보다 뒷타임이면 => 자리 비어있음
                         con_time=current_time
                         
             arrived=min(idx,arrived+m)
             break
 
-        if idx<arrived+m-1:
-            arrived=idx
-        arrived+=m
+        #버스 시간이 탑승 가능한 맨마지막 사람보다 앞일 때(인원은 되는데 시간이 늦음)
+        #이부분 뭐지???
+        elif idx<arrived+m-1:
+            arrived=idx #탄 사람만
+        arrived+=m #다음 가능한 수
         current_time+=t
-    
-    if con_time<=540 and arrived<m*n:
-        con_time=540
     
     con_h=con_time//60
     con_m=con_time%60
