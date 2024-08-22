@@ -1,12 +1,10 @@
-from itertools import accumulate
 n, k = map(int, input().split())
-lst = list(map(int, input().split()))
-lst = [0]+list(accumulate(lst))
-answer = -float('inf')
+prefix_sum = [0]+list(map(int, input().split()))
+for i in range(1, len(prefix_sum)):
+    prefix_sum[i] += prefix_sum[i-1]
 
+result = -float('inf')
 for i in range(k, n+1):
-    if i-k >= 0:
-        answer = max(answer, lst[i]-lst[i-k])
+    result = max(result, prefix_sum[i]-prefix_sum[i-k])
 
-
-print(answer)
+print(result)
