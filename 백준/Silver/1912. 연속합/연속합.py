@@ -1,12 +1,15 @@
-n = int(input())
-lst = [0]+list(map(int, input().split()))
+n=int(input())
+nums=list(map(int,input().split()))
+tmp=-float('inf')
+ans=-float('inf')
 
-dp = [lst[i] for i in range(n+1)]
-for i in range(1, n+1):
-    if dp[i-1]+lst[i] > 0:
-        dp[i] = dp[i-1]+lst[i]
-    if dp[i-1]+lst[i] < lst[i]:
-        dp[i] = lst[i]
+for num in nums:
+    if tmp<0:
+        tmp=max(tmp,num)
+        ans=max(ans,tmp)
+        continue
 
+    tmp+=num
+    ans=max(ans,tmp)
 
-print(max(dp[1:]))
+print(ans)
