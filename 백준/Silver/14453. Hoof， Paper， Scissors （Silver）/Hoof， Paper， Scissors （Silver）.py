@@ -20,7 +20,7 @@ for i in range(1, n+1):
     prefix_count[i] = prefix_count[i-1][:]
     prefix_count[i][idx] += 1
 
-suffix_count = [[0, 0, 0] for _ in range(n+2)]
+suffix_count = [[0, 0, 0] for _ in range(n+1)]
 for i in range(n, 0, -1):
     idx = john[i]
     suffix_count[n-i+1] = suffix_count[n-i][:]
