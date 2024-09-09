@@ -1,35 +1,19 @@
-import sys
-input=sys.stdin.readline
-n=int(input())
-lst=list(map(int,input().split()))
-m=int(input())
-check=list(map(int,input().split()))
-result=[0]*m
+from collections import defaultdict
 
+n = int(input())
+nums = list(map(int, input().split()))
+m = int(input())
+req = list(map(int, input().split()))
 
-# -10 -10 2 3 3 6 7 10 10 10
-def bin(start, end, i):
-    x=check[i]
-    if start>end:
-        return
-
-    mid=(start+end)//2
-    if lst[mid]==x:
-        result[i]=lst[start:end+1].count(x)
-        return
-
-    if x>lst[mid]:
-        bin(mid+1, end, i)
+dic = defaultdict(int)
+for num in nums:
+    if dic[num] > 0:
+        dic[num] += 1
     else:
-        bin(start, mid-1, i)
+        dic[num] = 1
 
-find={}
-lst.sort()
-for i,c in enumerate(check):
-    if c in find:
-        result[i]=find[c]
-        continue
-    bin(0,n-1,i)
-    find[c]=result[i]
+ans = []
+for x in req:
+    ans.append(dic[x])
 
-print(*result)
+print(*ans)
