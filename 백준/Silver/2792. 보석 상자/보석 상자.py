@@ -1,22 +1,22 @@
+import math
 n, m = map(int, input().split())
-arr = [int(input()) for _ in range(m)]
+jewely = []
+for _ in range(m):
+    jewely.append(int(input()))
 
-arr.sort()
-left = 1
-right = arr[-1]
-res = 0
-while left <= right:
-    mid = (left + right) //2
-    sum = 0
+l, r = 1, max(jewely)
+result = r
+while l <= r:
+    mid = (l+r)//2
+    tmp = 0
 
-    for jewel in arr:
-        cnt = jewel // mid if jewel % mid == 0 else jewel // mid + 1
-        sum += cnt
+    for j in jewely:
+        tmp += math.ceil(j/mid)  # 나머지가 얼마든 1명으로 계산
+    if tmp > n:
+        l = mid+1
+        continue
 
-    if sum > n:
-        left = mid +1
-    else:
-        res = mid
-        right = mid -1
+    result = min(result, mid)
+    r = mid-1
 
-print(res)
+print(result)
