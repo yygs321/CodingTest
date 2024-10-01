@@ -11,7 +11,7 @@ dy = [[], [[1], [-1], [0], [0]], [[1, -1], [0, 0]], [[0, 1], [1, 0], [0, -1],
                                                      [-1, 0]], [[-1, 0, 1], [0, 1, 0], [1, 0, -1], [0, -1, 0]], [[-1, 0, 1, 0]]]
 
 
-def dfs(i, j, now_graph, xlst, ylst):
+def bfs(i, j, now_graph, xlst, ylst):
     visited = [[False for _ in range(m)] for _ in range(n)]
     visited[i][j] = True
 
@@ -44,17 +44,18 @@ def dfs(i, j, now_graph, xlst, ylst):
     return now_graph
 
 
-def backTracking(i, j, new_graph):
+def track(i, j, new_graph):
     cctv_num = new_graph[i][j]
     tmp_lst = []
 
     for xlst, ylst in zip(dx[cctv_num], dy[cctv_num]):
         # 각 방향마다의 이동값 x,y
-        tmp_lst.append(dfs(i, j, deepcopy(new_graph), xlst, ylst))
+        tmp_lst.append(bfs(i, j, deepcopy(new_graph), xlst, ylst))
 
     return tmp_lst
 
 
+# cctv 위치 모두 받아놓기
 cctv_lst = []
 for i in range(n):
     for j in range(m):
@@ -64,6 +65,7 @@ for i in range(n):
             continue
         cctv_lst.append((i, j))
 
+# cctv 가 하나도 없을 때 (0이나 6만 있음 -> 6갯수 세주기)
 if not cctv_lst:
     cnt = 0
     for i in range(n):
@@ -71,15 +73,19 @@ if not cctv_lst:
     print(cnt)
     exit()
 
+
 graph_queue = deque()
 graph_queue.append(deepcopy(graph))
+# 앞의 cctv의 경우에 이어서 다음 cctv의 경우를 다 확인해봐야함
 for cctv in cctv_lst:
     i, j = cctv
     tmp_lst = []
+
+    # 여기서 graph_queue는 앞의 cctv가 지나간 모든 경우의 수를 포함
     while graph_queue:
         gq = graph_queue.popleft()
 
-        tmp_lst += backTracking(i, j, gq)
+        tmp_lst += track(i, j, gq)
 
     for tmp in tmp_lst:
         graph_queue.append(tmp)
