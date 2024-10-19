@@ -1,13 +1,13 @@
-n,k=map(int,input().split())
-num=[]
-for _ in range(n):
-    num.append(int(input()))
+n, k = map(int, input().split())
 
-dp=[0 for _ in range(k+1)]
-dp[0]=1 #num에 2가 들어있는 경우 더해줘야하므로
-for i in num:
-    for j in range(k+1):
-        if j-i<0: continue
-        dp[j]+=dp[j-i]
+coins = []
+for i in range(n):
+    coins.append(int(input()))
+coins.sort()
 
+dp = [0] * (k + 1)
+dp[0] = 1
+for c in coins:
+    for i in range(c, k + 1):
+        dp[i] += dp[i - c]
 print(dp[k])
