@@ -1,38 +1,46 @@
 from collections import deque
 n=int(input())
-#띄어쓰기없는 배열 받아올땐 rstrip
-map=[list(map(int,input().rstrip())) for _ in range(n)]
+graph=[list(map(int,input().rstrip())) for _ in range(n)]
+ans=[]
 dx=[-1,1,0,0]
 dy=[0,0,-1,1]
-visited=[[False for _ in range(n)] for _ in range(n)]
-queue=deque()
-result=[]
+visited=[[False]*n for _ in range(n)]
 
-def bfs(r,c):
-    global result
+def bfs(i,j):
+    queue=deque()
+    queue.append((i,j))
+    visited[i][j]=True
     cnt=1
-    queue.append((r,c))
-    visited[r][c]=True
-  
+
     while queue:
-        x,y=queue.pop()
-    
-        for i in range(4):
-            nx=x+dx[i]
-            ny=y+dy[i]
-            if 0<=nx<n and 0<=ny<n:
-                if map[nx][ny]==1 and visited[nx][ny]==False:
-                    visited[nx][ny]=True
-                    cnt+=1
-                    queue.append((nx,ny))
-    result.append(cnt)
+        x,y=queue.popleft()
+
+        for k in range(4):
+            nx=x+dx[k]
+            ny=y+dy[k]
+
+            if nx<0 or ny<0 or nx>=n or ny>=n:
+                continue
+            if visited[nx][ny]==True:
+                continue
+            if graph[nx][ny]==0:
+                continue
+            visited[nx][ny]=True
+            cnt+=1
+            queue.append((nx,ny))
+    return cnt
+
+
 
 for i in range(n):
     for j in range(n):
-        if map[i][j]==1 and visited[i][j]==False:
-            bfs(i,j)
+        if graph[i][j]==0:
+            continue
+        if visited[i][j]==True:
+            continue
+        cnt=bfs(i,j)
+        ans.append(cnt)
 
-result.sort()
-print(len(result))
-for r in result:
-    print(r)
+print(len(ans))
+for a in sorted(ans):
+    print(a)
