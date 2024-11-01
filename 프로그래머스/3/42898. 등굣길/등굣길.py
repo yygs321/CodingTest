@@ -13,6 +13,7 @@ def solution(m, n, puddles):
             if (i,j) in puddles_set:
                 dp[i][j]=0
                 continue 
+                
             dp[i][j]=(dp[i-1][j]+dp[i][j-1])%INF
             
     return (dp[n][m])%INF
