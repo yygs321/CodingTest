@@ -2,18 +2,22 @@ from collections import Counter
 
 def solution(topping):
     answer = 0
-    checked=set()
-    count_lst=Counter(topping)
+    dict_cnt=Counter(topping)
+    n=len(set(topping))
     
-    for tp in topping:
-        count_lst[tp]-=1
-        if count_lst[tp]<=0:
-            count_lst.pop(tp)
+    m=0
+    set1=set()
+    for t in topping:
+        if t not in set1:
+            m+=1
+            set1.add(t)
+        dict_cnt[t]-=1
         
-        if tp not in checked:
-            checked.add(tp)
-            
-        if len(checked)==len(count_lst):
+        if dict_cnt[t]<=0:
+            n-=1
+        
+        if n==m:
             answer+=1
+        
         
     return answer
