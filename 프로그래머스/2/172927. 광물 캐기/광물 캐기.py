@@ -1,54 +1,33 @@
-answer = int(1e9)
-    
 def solution(picks, minerals):
+    # 사용할 수 있는 최대 광물 수
+    max_minerals = sum(picks) * 5
+    minerals = minerals[:max_minerals]  # 캘 수 있는 만큼만 자르기
 
-    # 다이아몬드, 철, 돌에 따른 피로도
-    fatigue_values = [(1, 1, 1), (5, 1, 1), (25, 5, 1)]
+    # 광물 5개씩 묶어서 카운트
+    groups = [[0, 0, 0] for _ in range(10)]
+    for i, mineral in enumerate(minerals):
+        if mineral == 'diamond':
+            groups[i // 5][0] += 1
+        elif mineral == 'iron':
+            groups[i // 5][1] += 1
+        else:
+            groups[i // 5][2] += 1
 
-    # DFS 함수 정의
-    def dfs(depth, fatigue, usage):
-        global answer
+    # 피로도가 높은 순으로 정렬
+    groups.sort(key=lambda x: (-x[0], -x[1], -x[2]))
 
-        # 모든 곡괭이 사용 완료 시 최소 피로도 갱신
-        if depth == sum(picks):
-            answer = min(answer, fatigue)
-            return
+    # 피로도 계산
+    answer = 0
+    for group in groups:
+        d, i, s = group
+        if picks[0] > 0:  # 다이아 곡괭이
+            picks[0] -= 1
+            answer += d + i + s
+        elif picks[1] > 0:  # 철 곡괭이
+            picks[1] -= 1
+            answer += 5 * d + i + s
+        elif picks[2] > 0:  # 돌 곡괭이
+            picks[2] -= 1
+            answer += 25 * d + 5 * i + s
 
-        # 모든 곡괭이에 대해 탐색
-        for i in range(3):
-            # 해당 곡괭이 사용 가능 여부 확인
-            if usage[i] < picks[i]:
-                usage[i] += 1
-                # 현재 곡괭이로 인한 피로도 계산
-                plus = calculate_fatigue(depth, i)
-                # 다음 곡괭이로 이동
-                dfs(depth + 1, fatigue + plus, usage)
-                usage[i] -= 1
-
-        # 광물 종류에 따른 피로도 계산
-    def calculate_fatigue(depth, index):
-        start = depth * 5  # 현재 그룹의 시작 인덱스
-        end = (depth + 1) * 5  # 현재 그룹의 끝 인덱스 (다음 그룹 시작 인덱스)
-        plus = 0  # 피로도 누적 변수
-
-        # 현재 그룹에서 광물을 순회하며 피로도 누적
-        for mineral in minerals[start:end]:
-            # 다이아몬드인 경우
-            if mineral == "diamond":
-                plus += fatigue_values[index][0]
-            # 철광석인 경우
-            elif mineral == "iron":
-                plus += fatigue_values[index][1]
-            # 돌인 경우
-            else:  # stone
-                plus += fatigue_values[index][2]
-
-        return plus
-
-
-    # 곡괭이 사용 횟수 기록
-    usage = [0, 0, 0]
-    # DFS 시작
-    dfs(0, 0, usage)
-    # 최소 피로도 반환
     return answer
