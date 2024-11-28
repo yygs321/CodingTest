@@ -1,41 +1,42 @@
-
 def solution(plans):
-    plans.sort(key=lambda x:x[1])
     answer = []
-    wait=[]
-    
-    for idx, plan in enumerate(plans):
-        name, start, time=plan
+    n=len(plans)
+    start_time=[]
+    dic={}
+    for idx,plan in enumerate(plans):
+        name, start, playtime=plan
         hh,mm=map(int,start.split(":"))
-        start=hh*60+mm
-        time=int(time)
-        
-        if idx==len(plans)-1:
-            answer.append(name)
-            break
-        hh2,mm2=map(int,plans[idx+1][1].split(":"))
-        next_start=hh2*60+mm2
-        
-        if start+time==next_start:
-            answer.append(name)
-        elif start+time>next_start:
-            wait.append((name,(start+time)-next_start))
-        else: #시간이 남으면
-            answer.append(name)
-            if not wait:
-                continue
-            remain=next_start-(start+time)
-            while remain and wait:
-                wait_name, wait_time=wait.pop()
-                if remain>=wait_time:
-                    answer.append(wait_name)
-                    remain-=wait_time
+        hhmm=hh*60+mm
+        start_time.append((hhmm, idx, int(playtime)))
+        dic[idx]=name
+
+    start_time.sort(key=lambda x:x[0])
+    
+    remain=[]
+    while start_time:
+        start, idx, play= start_time.pop(0)
+        if not start_time:
+            answer.append(dic[idx])
+            continue
+            
+        nxt=start_time[0][0]
+        if start+play>nxt:
+            remain.append([idx, (start+play)-nxt])
+        elif start+play==nxt:
+            answer.append(dic[idx])
+        else:
+            answer.append(dic[idx])
+            tmp=nxt-(start+play)
+            while remain and tmp:
+                if remain[-1][1] <= tmp:
+                    tmp-=remain[-1][1]
+                    answer.append(dic[remain.pop()[0]])
                 else:
-                    wait.append((wait_name, wait_time-remain))
-                    remain=0
-    
-    while wait:
-        name,time=wait.pop()
-        answer.append(name)
-    
+                    remain[-1][1]-=tmp
+                    break
+        
+    while remain:
+        idx,play=remain.pop()
+        answer.append(dic[idx])
+        
     return answer
