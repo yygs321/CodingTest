@@ -26,7 +26,7 @@ def solution(points, routes):
                         sy+=1
                     elif ey<sy:
                         sy-=1
-    
+        # 맨마지막 위치가 안담겼기때문에 담아주기
         if (sx,sy,time) in move_dict:
             move_dict[(sx,sy,time)]+=1
         else:
