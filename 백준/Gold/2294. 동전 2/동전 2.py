@@ -5,10 +5,9 @@ n, k = map(int, input().split())
 coins = [int(input()) for _ in range(n)]
 
 dp = [-1] * (k + 1)
+dp[0]=0
 
 def dfs(num):
-    if num == 0:
-        return 0
     if num < 0:
         return float('inf')
 
