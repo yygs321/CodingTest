@@ -1,44 +1,60 @@
+from collections import defaultdict
 import heapq
-from math import inf
+import sys
+sys.setrecursionlimit(10**6)
 
 def solution(n, paths, gates, summits):
-    # 간선 정리 (양방향)
-    graph = [[] for _ in range(n + 1)]
-    for i, j, w in paths:
-        graph[i].append([j, w])
-        graph[j].append([i, w])
+    graph = defaultdict(list)
+    
+    gates = set(gates)
+    summits = set(summits)
+    
+    for s, e, d in paths:
+        graph[s].append((e, d))
+        graph[e].append((s, d))
 
-    # 산봉우리 판별
-    is_summit = [False] * (n + 1)
-    for summit in summits:
-        is_summit[summit] = True
+    dp = [float('inf')] * (n + 1)
+    tmp = float('inf')
+    answer = -1
 
-    # gates 모두 시작 위치
-    distance = [inf] * (n + 1)
-    queue = []
+    # BFS를 사용하여 최소 경로의 최대값을 구함
+    def bfs(gate):
+        nonlocal tmp, answer
+        queue = []
+        heapq.heappush(queue, (0, gate))
+        dp[gate] = 0
+
+        while queue:
+            cur_d, cur = heapq.heappop(queue)
+
+            # 현재 값이 dp값보다 크면 더 이상 진행할 필요 없음
+            if cur_d > dp[cur]:
+                continue
+
+            # summits에 도달한 경우
+            if cur in summits:
+                # tmp보다 더 큰 값은 무시
+                if tmp < cur_d:
+                    continue
+                # tmp와 같은 값일 경우, summit 번호가 더 큰 값은 무시
+                if tmp == cur_d and answer < cur:
+                    continue
+                answer = cur
+                tmp = cur_d
+                continue
+
+            # 인접 노드 탐색
+            for nxt, nxt_d in graph[cur]:
+                if nxt in gates:
+                    continue
+
+                new_d = max(cur_d, nxt_d)
+                if new_d < dp[nxt]:
+                    dp[nxt] = new_d
+                    heapq.heappush(queue, (new_d, nxt))
+
+    # 모든 gate에서 BFS 탐색 시작
     for gate in gates:
-        distance[gate] = 0
-        heapq.heappush(queue, [0, gate])
+        bfs(gate)
 
-    # 다익스트라
-    while queue:
-        d, i = heapq.heappop(queue)
-        # 산봉우리면 바로 continue
-        # 이렇게 해야 두 개 이상의 산봉우리를 방문하지 않는다.
-        if distance[i] < d or is_summit[i]:
-            continue
-        for j, dd in graph[i]:
-            dd = max(distance[i], dd)
-            if distance[j] > dd:
-                distance[j] = dd
-                heapq.heappush(queue, [dd, j])
-
-    # 결과
-    # 거리가 같으면 산봉우리의 번호가 작은 것을 출력해야 하므로
-    # 산봉우리를 정렬하여 살펴보자.
-    result = [-1, inf]
-    for summit in sorted(summits):
-        if distance[summit] < result[1]:
-            result[0] = summit
-            result[1] = distance[summit]
-    return result
+    return [answer, tmp]
