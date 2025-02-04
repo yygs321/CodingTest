@@ -1,21 +1,28 @@
+from collections import Counter, defaultdict
 from itertools import combinations
-from collections import Counter
-
 def solution(orders, course):
-    answer = []
+    results = defaultdict(list)
+    combi=[]
+    course=set(course)
 
-    for c in course:
-        comb_list = []
+    for order in orders:
+        order=sorted(list(order))
+        for i in range(2,len(order)+1):
+            combi+=list(combinations(order,i))
+    cnt_combi=Counter(combi)
+    for key,val in sorted(list(cnt_combi.items()), key=lambda x:x[1], reverse=True):
+        if val<2:
+            continue
+        n= len(key)
+        if n in course:
+            if not results[n]:
+                results[n]=[(''.join(key), val)]
+                continue
+            if results[n][0][1]<=val:
+                results[n].append((''.join(key), val))
 
-        for order in orders:
-            comb_list += combinations(sorted(order), c)
-
-        #개수 많은 순으로 정렬된 배열 리턴
-        #  ex) ((a,b),3) : (a,b)조합이 3개 
-        count = Counter(comb_list).most_common()
-        answer += [l[0] for l in count if (l[1] == count[0][1] and l[1] > 1)]
-
-
-    answer = [''.join(a) for a in sorted(answer)]
-
-    return answer
+    answer=[]
+    for result in list(results.values()):
+        for r in result:
+            answer.append(r[0])
+    return sorted(answer)
