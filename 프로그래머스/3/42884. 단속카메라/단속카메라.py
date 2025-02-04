@@ -1,12 +1,14 @@
 def solution(routes):
+    cnt = 0
     routes.sort(key=lambda x:x[1])
-    tmp=routes[0][1]
-    
-    answer = 1
-    for idx,route in enumerate(routes):
-        if idx==0: continue
-        if route[0]>tmp:
-            answer+=1
-            tmp=route[1]
+    last=-30001
 
-    return answer
+    for idx, route in enumerate(routes):
+        if idx==0:
+            cnt+=1
+            last=route[1]
+            continue
+        if last<route[0]:
+            cnt+=1
+            last=route[1]
+    return cnt
