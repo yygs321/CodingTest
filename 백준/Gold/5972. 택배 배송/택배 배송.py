@@ -1,29 +1,27 @@
-#가중치 있는 최단거리: 다익스트라
+from collections import deque, defaultdict
 import heapq
-from collections import defaultdict
 
 n,m=map(int,input().split())
-distance=[int(1e9) for _ in range(n+1)]
-queue=[]
 graph=defaultdict(list)
-
 for _ in range(m):
-    x,y,v=map(int,input().split())
-    graph[x].append((v,y))
-    graph[y].append((v,x))
+    a,b,c=map(int,input().split())
+    graph[a].append((b,c))
+    graph[b].append((a,c))
 
-distance[1]=0
-heapq.heappush(queue,(0,1))
-def dijkstra():
+dist=[float('inf') for _ in range(n+1)]
+def dijkstra(start):
+    queue=[]
+    heapq.heappush(queue,(0, start))
+    dist[start]=0
+
     while queue:
-        dist, start=heapq.heappop(queue)
-        if distance[start]<dist: continue
+        cur_d, cur= heapq.heappop(queue)
 
-        for next_dist, next_node in graph[start]:
-            if distance[next_node]>dist+next_dist:
-                distance[next_node]= dist+next_dist
-                heapq.heappush(queue,(dist+next_dist, next_node))
+        for nxt, nxt_d in graph[cur]:
+            if dist[nxt]<= cur_d+nxt_d:
+                continue
+            dist[nxt]=cur_d+nxt_d
+            heapq.heappush(queue,(cur_d+nxt_d, nxt))
 
-dijkstra()
-
-print(distance[n])
+dijkstra(1)
+print(dist[n])
