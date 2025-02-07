@@ -1,28 +1,35 @@
 from collections import defaultdict
-
 def solution(tickets):
-    def dfs(start, path):
-        if len(path) == len(tickets) + 1:
-            answer.append(path)  # 리스트를 복사해서 저장
-            return
-        
-        for i, next in enumerate(dict[start]):
-            dict[start].pop(i)
-            dfs(next, path+[next])
-            dict[start].insert(i, next)
-            
-    answer = []
     
-    dict=defaultdict(list)
-    for s,e in tickets:
-        if dict[s]:
-            dict[s].append(e)
-            continue
+    graph=defaultdict(list)
+    countries=set()
+    num=0
+    for ticket in tickets:
+        s,e=ticket
+        graph[s].append((e,num))
+        num+=1
+        
+        if s not in countries:
+            countries.add(s)
+        if e not in countries:
+            countries.add(e)
             
-        dict[s]=[e]
-        
-    dfs('ICN', ['ICN'])
     
-    answer.sort()
+    def dfs(cur, path, visited):
+        if False not in visited:
+            result.append(path)
         
-    return answer[0]
+        for nxt,key in graph[cur]:
+            if visited[key]==True:
+                continue
+                
+            visited[key]=True
+            dfs(nxt, path+[nxt], visited)
+            visited[key]=False
+    
+    result=[]
+
+    visited=[False]*(len(tickets))
+    dfs("ICN", ["ICN"], visited)
+    
+    return sorted(result)[0]
