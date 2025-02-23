@@ -1,16 +1,13 @@
-n = int(input())
+k = int(input())
+coins = [2, 5]
+dp = [float('inf') for _ in range(100001)]
+dp[0]=0
+dp[2]=1
+dp[5]=1
 
-cnt = int(1e9)
-if n % 5 == 0:
-    cnt = n//5
+for i in range(1, k + 1):
+    for coin in coins:
+        if i >= coin:
+            dp[i] = min(dp[i], dp[i - coin] + 1)
 
-max_two = n//2
-for i in range(max_two, 0, -1):
-    tmp = n - (2*i)
-    if tmp % 5 != 0:
-        continue
-    cnt = min(cnt, i+tmp//5)
-
-if cnt == int(1e9):
-    cnt = -1
-print(cnt)
+print(dp[k] if dp[k] != float('inf') else -1)
