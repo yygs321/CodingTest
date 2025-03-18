@@ -1,30 +1,31 @@
-from collections import deque
-from collections import defaultdict
+from collections import deque,defaultdict
 
-N=int(input())
-parent=1
+n=int(input())
+parents=[i for i in range(n+1)]
+graph=defaultdict(list)
+for _ in range(n-1):
+    a,b=map(int,input().split())
 
-stack=deque()
-lst=defaultdict(list)
-result=defaultdict(list)
+    graph[a].append(b)
+    graph[b].append(a)
 
-for _ in range(N-1):
-    x,y=map(int,input().split())  
-    lst[x].append(y)
-    lst[y].append(x)
+def bfs():
+    queue=deque([1])
+    visited=[False for _ in range(n+1)]
+    visited[1]=True
 
-def dfs(stack,parent):
-    stack=[parent]
-    result[1]=1
-    while stack:
-        s=stack.pop()
-        for ls in lst[s]:
-            if result[ls]==[]:
-                result[ls]=s
-                stack.append(ls)
-                        
-dfs(stack,parent)
+    while queue:
+        cur=queue.popleft()
+        for nxt in graph[cur]:
+            if visited[nxt]:
+                continue
+            visited[nxt]=True
+            parents[nxt]=cur
+            queue.append(nxt)
 
-#defaultdict 라서 value로 가져와야함
-for i in range(2,N+1):
-    print(result[i])
+bfs()
+for i in range(2,n+1):
+    print(parents[i])
+
+
+
