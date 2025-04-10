@@ -1,35 +1,29 @@
-import sys
-input=sys.stdin.readline
-
 n=int(input())
-lst=sorted(list(map(int,input().split())))
+lst=list(sorted(map(int,input().split())))
 minV=float('inf')
 answer=[]
+flag=0
 
-def solve(n):
-    global minV
-    global answer
-    tmp=[]
-  
-    for i in range(n-2):
-        left=i+1
-        right=n-1
-  
-        while left<right:
-            tmp=[lst[i],lst[left],lst[right]]
-    
-            if minV>abs(sum(tmp)):
-                minV=abs(sum(tmp))
-                answer=tmp[:]
-              
-            if sum(tmp) >0:
-                right-=1
-            elif sum(tmp) <0: 
-                left+=1
-            else: #0이면
-                answer=tmp[:]
-                return answer
-    return answer
+for i in range(n-2):
+    l=i+1
+    r=n-1
 
-answer=solve(n)
-print(*sorted(answer))
+    while l<r:
+        tmp=[lst[i],lst[l],lst[r]]
+        if abs(sum(tmp)) <= minV:
+            answer=tmp
+            minV=abs(sum(tmp))
+
+        if sum(tmp)<0:
+            l+=1
+        elif sum(tmp)>0:
+            r-=1
+        else:
+            answer=tmp
+            flag=1
+            break
+
+    if flag:
+        break
+
+print(*answer)
