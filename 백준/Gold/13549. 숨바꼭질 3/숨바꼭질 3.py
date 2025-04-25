@@ -1,31 +1,42 @@
 from collections import deque
-
 n,k=map(int,input().split())
-dx=[2,-1,1]
-queue=deque()
-distance=[-1 for _ in range(100001)]
+dp=[float('inf') for _ in range(100001)]
 
-def bfs(start):
-    global k
-    queue.append(start)
-    distance[start]=0
-  
+def dfs(cur, val):
+    if cur<0:
+        return
+    if dp[cur]<=val:
+        return
+
+    dp[cur] = min(dp[cur],val)
+    if cur==k:
+        return
+
+    if cur-1>=0 and dp[cur-1]>dp[cur]+1:
+        dfs(cur-1, dp[cur]+1)
+    if cur+1<=100000 and dp[cur+1]>dp[cur]+1:
+        dfs(cur+1, dp[cur]+1)
+    if cur*2<=100000 and dp[cur*2]>dp[cur]:
+        dfs(cur*2, dp[cur])
+
+def bfs(cur):
+    queue=deque([cur])
+    dp[cur]=0
+
     while queue:
-        q=queue.popleft()
-        if q==k:
-            print(distance[q])
-            break
-          
-        for i in range(3):
-            if 0<i:
-                d=q+dx[i]
-                if 0<=d<=100000 and distance[d]==-1:
-                    distance[d]=distance[q]+1
-                    queue.append(d)
-            else:
-                d=q*dx[i]
-                if 0<=d<=100000 and distance[d]==-1:
-                    distance[d]=distance[q]
-                    queue.append(d)
+        cur=queue.popleft()
 
+        if cur-1>=0 and dp[cur-1]>dp[cur]+1:
+            dp[cur-1]=dp[cur]+1
+            queue.append(cur-1)
+        if cur + 1 <= 100000 and dp[cur + 1] > dp[cur] + 1:
+            dp[cur + 1] = dp[cur] + 1
+            queue.append(cur + 1)
+        if cur * 2 <= 100000 and dp[cur * 2] > dp[cur]:
+            dp[cur * 2] = dp[cur]
+            queue.append(cur * 2)
+
+
+#dfs(n,0)
 bfs(n)
+print(dp[k])
