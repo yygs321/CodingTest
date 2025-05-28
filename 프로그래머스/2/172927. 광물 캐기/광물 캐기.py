@@ -1,33 +1,61 @@
+# 5번 캐고나면 끝
+from itertools import permutations
+from collections import defaultdict, Counter
+
 def solution(picks, minerals):
-    # 사용할 수 있는 최대 광물 수
-    max_minerals = sum(picks) * 5
-    minerals = minerals[:max_minerals]  # 캘 수 있는 만큼만 자르기
-
-    # 광물 5개씩 묶어서 카운트
-    groups = [[0, 0, 0] for _ in range(10)]
-    for i, mineral in enumerate(minerals):
-        if mineral == 'diamond':
-            groups[i // 5][0] += 1
-        elif mineral == 'iron':
-            groups[i // 5][1] += 1
-        else:
-            groups[i // 5][2] += 1
-
-    # 피로도가 높은 순으로 정렬
-    groups.sort(key=lambda x: (-x[0], -x[1], -x[2]))
-
-    # 피로도 계산
     answer = 0
-    for group in groups:
-        d, i, s = group
-        if picks[0] > 0:  # 다이아 곡괭이
-            picks[0] -= 1
-            answer += d + i + s
-        elif picks[1] > 0:  # 철 곡괭이
-            picks[1] -= 1
-            answer += 5 * d + i + s
-        elif picks[2] > 0:  # 돌 곡괭이
-            picks[2] -= 1
-            answer += 25 * d + 5 * i + s
+    n=len(minerals)
+    m=sum(picks)
+    
+    pick=['diamond', 'iron', 'stone']
+    picks_dict=defaultdict(int)
+    picks_total=[]
+    for idx,cnt in enumerate(picks):
+        picks_dict[pick[idx]]=idx
+        picks_total+=[idx]*cnt
+    
+    minerals_cnt=[]
+    
+    for i in range(n):
+        minerals[i]=pick.index(minerals[i])
+    
+    for i in range(0,n,5):
+        cnt_lst=list(Counter(minerals[i:i+5]).items())
+        cnt_lst.sort()
+        minerals_cnt.append(cnt_lst)
+    
+    if m>=(n-1)//5+1:
+        minerals_cnt.sort(key=lambda x:[(x[i][0],-x[i][1]) for i in range(len(x))])
+    
+        for mineral in minerals_cnt:
+            p=-1
+            for idx,pick in enumerate(picks):
+                if pick:
+                    p=idx
+                    picks[idx]-=1
+                    break
+            if p==-1:
+                break
+
+            for mn in mineral:
+                if p-mn[0]<=0:
+                    answer+=1*mn[1]
+                else:
+                    answer+=(5**(p-mn[0]))*mn[1]
+            
+    else:
+        answer=100000000
+        for perm in set(permutations(picks_total,m)):
+            tmp=0
+            for idx,mineral in enumerate(minerals_cnt):
+                if idx>=len(perm):
+                    break
+
+                for mn in mineral:
+                    if perm[idx]-mn[0]<=0:
+                        tmp+=1*mn[1]
+                    else:
+                        tmp+=(5**(perm[idx]-mn[0]))*mn[1]
+            answer=min(answer,tmp)
 
     return answer
