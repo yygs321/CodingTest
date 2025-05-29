@@ -1,61 +1,36 @@
-# 5번 캐고나면 끝
-from itertools import permutations
-from collections import defaultdict, Counter
-
 def solution(picks, minerals):
-    answer = 0
-    n=len(minerals)
-    m=sum(picks)
-    
-    pick=['diamond', 'iron', 'stone']
-    picks_dict=defaultdict(int)
-    picks_total=[]
-    for idx,cnt in enumerate(picks):
-        picks_dict[pick[idx]]=idx
-        picks_total+=[idx]*cnt
-    
-    minerals_cnt=[]
-    
-    for i in range(n):
-        minerals[i]=pick.index(minerals[i])
-    
-    for i in range(0,n,5):
-        cnt_lst=list(Counter(minerals[i:i+5]).items())
-        cnt_lst.sort()
-        minerals_cnt.append(cnt_lst)
-    
-    if m>=(n-1)//5+1:
-        minerals_cnt.sort(key=lambda x:[(x[i][0],-x[i][1]) for i in range(len(x))])
-    
-        for mineral in minerals_cnt:
-            p=-1
-            for idx,pick in enumerate(picks):
-                if pick:
-                    p=idx
-                    picks[idx]-=1
-                    break
-            if p==-1:
-                break
+    fatigue_table = [[1, 1, 1], [5, 1, 1], [25, 5, 1]]
+    mineral_index = {'diamond': 0, 'iron': 1, 'stone': 2}
+    minerals=[mineral_index[x] for x in minerals]
 
-            for mn in mineral:
-                if p-mn[0]<=0:
-                    answer+=1*mn[1]
-                else:
-                    answer+=(5**(p-mn[0]))*mn[1]
-            
-    else:
-        answer=100000000
-        for perm in set(permutations(picks_total,m)):
-            tmp=0
-            for idx,mineral in enumerate(minerals_cnt):
-                if idx>=len(perm):
-                    break
+    n = len(minerals)
+    max_rounds = (n + 4) // 5
 
-                for mn in mineral:
-                    if perm[idx]-mn[0]<=0:
-                        tmp+=1*mn[1]
-                    else:
-                        tmp+=(5**(perm[idx]-mn[0]))*mn[1]
-            answer=min(answer,tmp)
+    answer = float('inf')
 
+    def dfs(current_picks, round_num, fatigue):
+        nonlocal answer
+
+        # 종료 조건: 라운드 초과 또는 곡괭이 소진
+        if round_num == max_rounds or sum(current_picks) == 0:
+            answer = min(answer, fatigue)
+            return
+
+        for pick in range(3):
+            if current_picks[pick] == 0:
+                continue
+
+            current_picks[pick] -= 1
+
+            tmp = 0
+            start = round_num * 5
+            end = min(start + 5, n)
+
+            for mineral in minerals[start:end]:
+                tmp += fatigue_table[pick][mineral]
+
+            dfs(current_picks, round_num + 1, fatigue + tmp)
+            current_picks[pick] += 1  # 백트래킹 복원
+
+    dfs(picks[:], 0, 0)
     return answer
