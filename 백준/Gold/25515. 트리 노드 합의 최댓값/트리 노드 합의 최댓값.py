@@ -18,11 +18,13 @@ def dfs(cur):
 
     tmp = nums[cur]
     for nxt in graph[cur]:
-        if not visited[nxt]:
-            val = dfs(nxt)
-            if val <= 0:
-                continue
-            tmp += val
+        if visited[nxt]:
+            continue
+            
+        val = dfs(nxt)
+        if val <= 0:
+            continue
+        tmp += val
 
     visited[cur] = True
     return tmp
