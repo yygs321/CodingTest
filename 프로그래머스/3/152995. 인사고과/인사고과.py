@@ -1,27 +1,27 @@
 def solution(scores):
-    answer = 0
+    answer = 1
+    if len(scores)==1:
+        return answer
+    
     wanho=scores[0]
+    wanho_val=sum(wanho)
     
-    filtered=[]
-    for score in scores[1:]:
-        if sum(score)<=sum(wanho):
-            continue
-        filtered.append((-score[0], score[1]))
-    filtered.sort()
+    new_scores=scores[1:]
+    new_scores.sort(key=lambda x:(-x[0],x[1]))
+    max_a,max_b=new_scores[0]
     
-        
-    cnt=1
-    max_b=0
-    for a,b in filtered:
-        a,b=-a,b
-        
-        if wanho[0]<a and wanho[1]<b:
+    for a,b in new_scores:
+        if a>wanho[0] and b>wanho[1]:
             return -1
-            
-        if b<max_b:
+        if max_a>a and max_b>b:
             continue
-        cnt+=1
-        max_b=b
+        
+        if a+b>wanho_val:
+            answer+=1
+            
+        if b>max_b:
+            max_a=a
+            max_b=b
+
     
-    answer=cnt
     return answer
