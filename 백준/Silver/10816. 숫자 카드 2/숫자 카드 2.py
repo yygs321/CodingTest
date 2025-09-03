@@ -1,19 +1,17 @@
-from collections import defaultdict
+from bisect import bisect_left
 
-n = int(input())
-nums = list(map(int, input().split()))
-m = int(input())
-req = list(map(int, input().split()))
+n=int(input())
+nums=list(map(int,input().split()))
+m=int(input())
+lst=list(map(int,input().split()))
 
-dic = defaultdict(int)
-for num in nums:
-    if dic[num] > 0:
-        dic[num] += 1
-    else:
-        dic[num] = 1
+nums.sort()
+result=[]
+for val in lst:
+    cnt=0
 
-ans = []
-for x in req:
-    ans.append(dic[x])
+    idx1=bisect_left(nums,val)
+    idx2=bisect_left(nums,val+1)
+    result.append(idx2-idx1)
 
-print(*ans)
+print(*result)
