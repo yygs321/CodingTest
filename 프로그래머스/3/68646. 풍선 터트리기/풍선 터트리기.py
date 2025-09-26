@@ -12,7 +12,7 @@ def solution(a):
         if idx==0 or idx==n-1:
             answer+=1 #양끝은 무조건 남을 수 있음
             continue
-        if left[idx-1]<cur and right[idx+1]<cur:
+        if left[idx-1]<cur and right[idx+1]<cur: # 둘다 cur보다 작으면 불가능
             continue
         answer+=1
         
